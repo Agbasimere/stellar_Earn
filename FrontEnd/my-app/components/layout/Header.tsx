@@ -5,11 +5,11 @@ import { GlobalSearch } from '@/components/search/GlobalSearch';
 export function Header() {
   return (
     <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-zinc-800 dark:bg-zinc-900/95 dark:supports-[backdrop-filter]:bg-zinc-900/60">
-      <div className="flex h-16 items-center gap-4 px-4 sm:px-6 lg:px-8">
-        {/* Logo (mobile only) */}
-        <div className="flex items-center gap-2 lg:hidden">
+      <div className="flex h-16 items-center gap-2 px-4 sm:gap-4 sm:px-6 lg:px-8">
+        {/* Logo (mobile only) - Hidden on small screens to save space */}
+        <div className="hidden items-center gap-2 sm:flex lg:hidden">
           <div
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-white"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-white"
             style={{ backgroundColor: '#089ec3' }}
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -27,12 +27,12 @@ export function Header() {
         </div>
 
         {/* Search - takes remaining space */}
-        <div className="flex-1 max-w-2xl">
+        <div className="flex-1 sm:max-w-2xl">
           <GlobalSearch />
         </div>
 
         {/* User actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <button
             className="rounded-lg p-2 text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
             aria-label="Notifications"
