@@ -1,23 +1,45 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './modules/auth/auth.module';
 import { SubmissionsModule } from './modules/submissions/submissions.module';
 import { StellarModule } from './modules/stellar/stellar.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { RefreshToken } from './modules/auth/entities/refresh-token.entity';
+import { Submission } from './modules/submissions/entities/submission.entity';
+import { Quest } from './modules/quests/entities/quest.entity';
+import { User } from './modules/users/entities/user.entity';
+import { Notification } from './modules/notifications/entities/notification.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DATABASE_URL,
-      autoLoadEntities: true,
-      synchronize: process.env.NODE_ENV === 'development', // Don't use in production
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),
+        entities: [RefreshToken, Submission, Quest, User, Notification], // Add all entities
+        synchronize: configService.get<string>('NODE_ENV') !== 'production',
+        logging: configService.get<string>('NODE_ENV') === 'development',
+      }),
+      inject: [ConfigService],
+    }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => [
+        {
+          ttl: configService.get<number>('RATE_LIMIT_TTL', 60) * 1000,
+          limit: configService.get<number>('RATE_LIMIT_MAX', 100),
+        },
+      ],
+      inject: [ConfigService],
     }),
     AuthModule,
     SubmissionsModule,
