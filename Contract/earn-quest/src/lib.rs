@@ -1,7 +1,9 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, token, Address, BytesN, Env, Symbol};
+
+use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, Symbol, Vec};
 
 mod errors;
+mod payout;
 mod quest;
 mod reputation;
 mod storage;

@@ -1,11 +1,12 @@
-use soroban_sdk::{Address, BytesN, Env, Symbol};
-
 use crate::errors::Error;
 use crate::quest;
+use crate::errors::Error;
 use crate::storage;
-use crate::types::{Submission, SubmissionStatus};
+use crate::types::{QuestStatus, Submission, SubmissionStatus};
+use soroban_sdk::{Address, BytesN, Env, Symbol, Vec};
 
-/// Submit proof for a quest
+/// Submit proof of quest completion
+/// Validates that the quest exists, is active, hasn't expired, and user hasn't already submitted
 pub fn submit_proof(
     env: &Env,
     quest_id: Symbol,
