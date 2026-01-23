@@ -5,6 +5,14 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { RefreshToken } from './modules/auth/entities/refresh-token.entity';
+import { User } from './modules/analytics/entities/user.entity';
+import { Quest } from './modules/analytics/entities/quest.entity';
+import { Submission } from './modules/analytics/entities/submission.entity';
+import { Payout } from './modules/analytics/entities/payout.entity';
+import { AnalyticsSnapshot } from './modules/analytics/entities/analytics-snapshot.entity';
+
 import { QuestsModule } from './modules/quests/quests.module';
 import { RefreshToken } from './modules/auth/entities/refresh-token.entity';
 import { Quest } from './modules/quests/entities/quest.entity';
@@ -20,6 +28,14 @@ import { Quest } from './modules/quests/entities/quest.entity';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
+        entities: [
+          RefreshToken,
+          User,
+          Quest,
+          Submission,
+          Payout,
+          AnalyticsSnapshot,
+        ],
         entities: [RefreshToken, Quest],
         synchronize: configService.get<string>('NODE_ENV') !== 'production',
         logging: configService.get<string>('NODE_ENV') === 'development',
@@ -37,6 +53,7 @@ import { Quest } from './modules/quests/entities/quest.entity';
       inject: [ConfigService],
     }),
     AuthModule,
+    AnalyticsModule,
     QuestsModule,
   ],
   controllers: [AppController],
