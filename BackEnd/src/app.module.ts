@@ -31,10 +31,12 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { ErrorLoggerFilter } from './common/filter/error-logger.filter';
+import { CacheModule } from './modules/cache/cache.module';
 
 @Module({
   imports: [
     WebhooksModule,
+    CacheModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
