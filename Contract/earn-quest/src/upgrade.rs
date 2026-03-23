@@ -1,7 +1,7 @@
 use crate::errors::Error;
 use crate::storage;
 use crate::init::CONTRACT_VERSION;
-use soroban_sdk::{Env, Address, BytesN};
+use soroban_sdk::{Env, BytesN};
 
 /// Migrate state from current version to CONTRACT_VERSION
 pub fn migrate(env: &Env) -> Result<(), Error> {

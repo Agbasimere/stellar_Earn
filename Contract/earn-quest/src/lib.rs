@@ -234,19 +234,16 @@ impl EarnQuestContract {
 
     /// Upgrade the contract's WASM code and run any outstanding migrations (Admin only).
     pub fn upgrade_contract(env: Env, admin: Address, new_wasm_hash: BytesN<32>) -> Result<(), Error> {
-        admin.require_auth();
         admin::upgrade_contract(&env, admin, new_wasm_hash)
     }
 
     /// Manually trigger data migrations to the latest version (Admin only).
     pub fn trigger_migration(env: Env, admin: Address) -> Result<(), Error> {
-        admin.require_auth();
         admin::trigger_migration(&env, admin)
     }
 
     /// Roll back data to a specific version (Admin only).
     pub fn trigger_rollback(env: Env, admin: Address, target_version: u32) -> Result<(), Error> {
-        admin.require_auth();
         admin::trigger_rollback(&env, admin, target_version)
     }
 }
